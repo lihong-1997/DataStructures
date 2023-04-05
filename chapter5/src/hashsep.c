@@ -1,4 +1,6 @@
 #include "hashsep.h"
+#include "hash.h"
+#include "prime.h"
 
 struct ListNode
 {
@@ -14,32 +16,6 @@ struct HashTbl
     int TableSize;
     List* TheLists;
 };
-
-static Index Hash(ElementType Key, int TableSize)
-{
-    return Key % TableSize;
-}
-
-static int isPrime(int n)
-{
-    for (int i = 2; i * i <=n; i++)
-    {
-        if (n % i == 0) return 0;
-    }
-    return 1;
-}
-
-int NextPrime(int TableSize)
-{
-    if (isPrime(TableSize))
-        return TableSize;
-    else
-    {
-        while (++TableSize)
-            if (isPrime(TableSize)) break;
-        return TableSize;
-    }
-}
 
 HashTable InitializeTable(int TableSize)
 {
@@ -107,4 +83,21 @@ void Insert(ElementType Key, HashTable H)
 ElementType Retrieve(Position P)
 {
     return P->Element;
+}
+
+void DestroyTbale(HashTable H)
+{
+    for (int i = 0; i < H->TableSize; i++)
+    {
+        Position P = H->TheLists[i];
+        Position tmp;
+        while (P != NULL)
+        {
+            tmp = P->Next;
+            free(P);
+            P = tmp;
+        }
+    }
+    free(H->TheLists);
+    free(H);
 }
