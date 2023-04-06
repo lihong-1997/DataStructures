@@ -37,6 +37,8 @@ HashTable InitializeTable(int TableSize)
 
     for (int i = 0; i < H->TableSize; i++)
         H->TheCells[i].Info = Empty;
+    
+    printf("hash table has been created, size:%d\n", H->TableSize);
 
     return H;
 }
@@ -72,7 +74,8 @@ void InsertLinear(ElementType Key, HashTable H)
 {
     Position P;
     P = FindLinear(Key, H);
-    if (H->TheCells[P].Info != Legitimate)
+    // 对已经存在的数，不进行插入
+    if (H->TheCells[P].Info != Legitimate) 
     {
         H->TheCells[P].Element = Key;
         H->TheCells[P].Info = Legitimate;
@@ -87,46 +90,56 @@ Position FindSquare(ElementType Key, HashTable H)
     CollisionNum = 0;
 
     // only when the table size is prime and half of table is empty, the loop can break
-    while (H->TheCells[CurrentPos].Info != Empty && H->TheCells[CurrentPos].Element != Key)
-    {
-        // Entering loop indicates a collision
-
-        // solvement 1: F(i) = i*i
-        CurrentPos += 2 * (++CollisionNum) - 1; // great
-        if (CurrentPos >= H->TableSize) 
-            CurrentPos %= H->TableSize;
-    }
-    // solvement 2: F(i) = ±i*i
-    // int NewPos = CurrentPos;
     // while (H->TheCells[CurrentPos].Info != Empty && H->TheCells[CurrentPos].Element != Key)
     // {
     //     // Entering loop indicates a collision
-    //     // go right
-    //     if (++CollisionNum % 2)
-    //     {
-    //         NewPos = CurrentPos + (CollisionNum + 1)/2 * (CollisionNum + 1)/2;
-    //         while (CurrentPos >= H->TableSize) NewPos -= H->TableSize;
-    //     }
-    //     else // go left
-    //     {
-    //         NewPos = CurrentPos - CollisionNum / 2 * CollisionNum / 2;
-    //         while (CurrentPos < 0) NewPos += H->TableSize;
-    //     }
-    // }
-    // return NewPos;
 
-    return CurrentPos;
+    //     // solvement 1: F(i) = i*i
+    //     CurrentPos += 2 * (++CollisionNum) - 1; // great
+    //     if (CurrentPos >= H->TableSize) 
+    //         CurrentPos %= H->TableSize;
+    // }
+    //return CurrentPos;
+
+    // solvement 2: F(i) = ±i*i
+    int NewPos = CurrentPos;
+    while (H->TheCells[NewPos].Info != Empty && H->TheCells[NewPos].Element != Key)
+    {
+        // Entering loop indicates a collision
+        // go right
+        if (++CollisionNum % 2)
+        {
+            NewPos = CurrentPos + (CollisionNum + 1)/2 * (CollisionNum + 1)/2;
+            while (NewPos >= H->TableSize) NewPos -= H->TableSize;
+        }
+        else // go left
+        {
+            NewPos = CurrentPos - CollisionNum / 2 * CollisionNum / 2;
+            while (NewPos < 0) NewPos += H->TableSize;
+        }
+    }
+
+    return NewPos;
 }
 
-void InsertSquare(ElementType Key, HashTable H)
+HashTable InsertSquare(ElementType Key, HashTable H)
 {
     Position P;
+    double LoadFactor;
     P = FindSquare(Key, H);
     if (H->TheCells[P].Info != Legitimate)
     {
         H->TheCells[P].Element = Key;
         H->TheCells[P].Info = Legitimate;
     }
+    LoadFactor = GetLoadFactor(H);
+    // printf("load factor:%f\n", LoadFactor);
+    if (LoadFactor > CriticalValue)
+    {
+        printf("rehash happened\n");
+        H = Rehash(H);
+    }
+    return H;
 }
 
 Position FindDoubleHash(ElementType Key, HashTable H)
@@ -162,6 +175,25 @@ void InsertDoubleHash(ElementType Key, HashTable H)
     }
 }
 
+void PrintHashTable(HashTable H)
+{
+    for (unsigned int i = 0; i < H->TableSize; i++)
+    {
+        if (H->TheCells[i].Info == Legitimate)
+        printf("%d ",H->TheCells[i].Element);
+    }
+    printf("\n");
+}
+
+double GetLoadFactor(HashTable H)
+{
+    unsigned int count = 0;
+    for (unsigned int i = 0; i < H->TableSize; i++)
+        if (H->TheCells[i].Info == Legitimate) ++count;
+    
+    return (double)count / H->TableSize;
+}
+
 ElementType Retrieve(Position P, HashTable H)
 {
     return H->TheCells[P].Element;
@@ -179,7 +211,7 @@ HashTable Rehash(HashTable H)
     for (int i = 0; i < OldSize; i++)
     {
         if (OldCells[i].Info == Legitimate)
-            Insert(OldCells[i].Element, H);
+            H = InsertSquare(OldCells[i].Element, H);
     }
 
     free(OldCells);
