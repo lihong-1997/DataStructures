@@ -5,10 +5,12 @@ int main()
     HashTable H;
     int TableSize = 10;
     /******线性探测法******/
+    CNum = 0;
     H = InitializeTable(TableSize, 1);
     for (int i = 1; i < 7; i++)
         InsertLinear(i*i, H);
     
+    printf("collision count:%d\n", CNum);
     Position p;
     for (int i = 1; i < 7; i++)
     {
@@ -39,7 +41,7 @@ int main()
     int testArr[] = { 4371,1323,6173,4199,4344,9679,1989 };
     int len = sizeof(testArr)/sizeof(*testArr);
 
-    H = InitializeTable(TableSize, 0);
+    H = InitializeTable(TableSize, 0); // 表大小无需素数
     for (int i = 0; i < len; i++)
         InsertDoubleHash(testArr[i], H);
     

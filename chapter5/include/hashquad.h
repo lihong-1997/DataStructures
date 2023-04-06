@@ -16,6 +16,8 @@ typedef Index Position;
 struct HashTbl;
 typedef struct HashTbl* HashTable;
 
+extern unsigned int CNum;
+
 // FLAG 是否让表的大小为素数
 HashTable InitializeTable(int TableSize, int FLAG);
 void DestroyTable(HashTable H);

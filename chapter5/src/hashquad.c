@@ -2,6 +2,7 @@
 #include "hash.h"
 #include "prime.h"
 
+//开放定址法只能采用懒惰删除，故表的每个单元需要3个状态
 enum KindOfEntry {Legitimate, Empty, Deleted};
 
 struct HashEntry
@@ -25,16 +26,19 @@ HashTable InitializeTable(int TableSize, int FLAG)
         Error("Table size too small");
         return NULL;
     }
+
     HashTable H;
     H = malloc(sizeof(struct HashTbl));
     if (H == NULL)
         FatalError("out of space");
     
+    // 判断需不需要对表的大小采取素数方案
     H->TableSize = FLAG ? NextPrime(TableSize) : TableSize;
+
     H->TheCells = malloc(sizeof(Cell) * H->TableSize);
     if (H == NULL)
         FatalError("out of space");
-
+    // 初始化空单元
     for (int i = 0; i < H->TableSize; i++)
         H->TheCells[i].Info = Empty;
     
@@ -56,7 +60,7 @@ Position FindLinear(ElementType Key, HashTable H)
     int CollisionNum;
     CollisionNum = 0;
 
-    // only when the table size is prime and half of table is empty, the loop can break
+    // 只要表不满，循环可退出
     while (H->TheCells[CurrentPos].Info != Empty && H->TheCells[CurrentPos].Element != Key)
     {
         // Entering loop indicates a collision
@@ -66,6 +70,8 @@ Position FindLinear(ElementType Key, HashTable H)
         if (CurrentPos >= H->TableSize) 
             CurrentPos %= H->TableSize;
     }
+
+    CNum += CollisionNum;
 
     return CurrentPos;
 }
@@ -89,37 +95,42 @@ Position FindSquare(ElementType Key, HashTable H)
     int CollisionNum;
     CollisionNum = 0;
 
-    // only when the table size is prime and half of table is empty, the loop can break
-    // while (H->TheCells[CurrentPos].Info != Empty && H->TheCells[CurrentPos].Element != Key)
-    // {
-    //     // Entering loop indicates a collision
-
-    //     // solvement 1: F(i) = i*i
-    //     CurrentPos += 2 * (++CollisionNum) - 1; // great
-    //     if (CurrentPos >= H->TableSize) 
-    //         CurrentPos %= H->TableSize;
-    // }
-    //return CurrentPos;
-
-    // solvement 2: F(i) = ±i*i
-    int NewPos = CurrentPos;
-    while (H->TheCells[NewPos].Info != Empty && H->TheCells[NewPos].Element != Key)
+    //when the table size is prime and half of table is empty, the loop can always break
+    while (H->TheCells[CurrentPos].Info != Empty && H->TheCells[CurrentPos].Element != Key)
     {
         // Entering loop indicates a collision
-        // go right
-        if (++CollisionNum % 2)
-        {
-            NewPos = CurrentPos + (CollisionNum + 1)/2 * (CollisionNum + 1)/2;
-            while (NewPos >= H->TableSize) NewPos -= H->TableSize;
-        }
-        else // go left
-        {
-            NewPos = CurrentPos - CollisionNum / 2 * CollisionNum / 2;
-            while (NewPos < 0) NewPos += H->TableSize;
-        }
+
+        // solvement 1: F(i) = i*i
+        CurrentPos += 2 * (++CollisionNum) - 1; // great
+        if (CurrentPos >= H->TableSize) 
+            CurrentPos %= H->TableSize;
     }
 
-    return NewPos;
+    CNum += CollisionNum;
+    
+    return CurrentPos;
+
+    // solvement 2: F(i) = ±i*i
+    // int NewPos = CurrentPos;
+    // while (H->TheCells[NewPos].Info != Empty && H->TheCells[NewPos].Element != Key)
+    // {
+    //     // Entering loop indicates a collision
+    //     // go right
+    //     if (++CollisionNum % 2)
+    //     {
+    //         NewPos = CurrentPos + (CollisionNum + 1)/2 * (CollisionNum + 1)/2;
+    //         while (NewPos >= H->TableSize) NewPos -= H->TableSize;
+    //     }
+    //     else // go left
+    //     {
+    //         NewPos = CurrentPos - CollisionNum / 2 * CollisionNum / 2;
+    //         while (NewPos < 0) NewPos += H->TableSize;
+    //     }
+    // }
+
+    //CNum += CollisionNum;
+
+    //return NewPos;
 }
 
 HashTable InsertSquare(ElementType Key, HashTable H)
@@ -151,10 +162,11 @@ Position FindDoubleHash(ElementType Key, HashTable H)
 
     int R;
     R = LastPrime(H->TableSize);
-
+    // 散列表大小不是素数，可能无法退出循环
     while (H->TheCells[CurrentPos].Info != Empty && H->TheCells[CurrentPos].Element != Key)
     {
         // 进入循环说明发生冲突
+        ++CollisionNum;
         // 冲突解决方法: F(i) = i*hash(X) = i*(R-(X modR)), R必须为小于表的素数
         CurrentPos += (R - (Key % R));
         if (CurrentPos >= H->TableSize) 
@@ -167,6 +179,8 @@ Position FindDoubleHash(ElementType Key, HashTable H)
             return H->TableSize;
         }
     }
+
+    CNum += CollisionNum;
 
     return CurrentPos;
 }
