@@ -5,7 +5,7 @@ int main()
     HashTable H;
     int TableSize = 10;
     /******线性探测法******/
-    H = InitializeTable(TableSize);
+    H = InitializeTable(TableSize, 1);
     for (int i = 1; i < 7; i++)
         InsertLinear(i*i, H);
     
@@ -21,7 +21,7 @@ int main()
 
     /******平方探测法******/
     TableSize = 13;
-    H = InitializeTable(TableSize);
+    H = InitializeTable(TableSize, 1);
     for (int i = 1; i < 11; i++)
         H = InsertSquare(i*i, H);
     
@@ -34,16 +34,22 @@ int main()
 
     printf("--------------------------\n");
     
-    /******双散；列******/
-    TableSize = 14;
-    H = InitializeTable(TableSize);
-    for (int i = 1; i < 11; i++)
-        InsertDoubleHash(i*i, H);
+    /******双散列,插入失败案例******/
+    TableSize = 10;
+    int testArr[] = { 4371,1323,6173,4199,4344,9679,1989 };
+    int len = sizeof(testArr)/sizeof(*testArr);
+
+    H = InitializeTable(TableSize, 0);
+    for (int i = 0; i < len; i++)
+        InsertDoubleHash(testArr[i], H);
     
-    for (int i = 1; i < 11; i++)
+    for (int i = 0; i < len; i++)
     {
-        p = FindDoubleHash(i*i, H);
-        printf("find value:%d\n", Retrieve(p, H));
+        p = FindDoubleHash(testArr[i], H);
+        if (p != TableSize)
+            printf("find value:%d\n", Retrieve(p, H));
+        else
+            printf("can not find value:%d\n", testArr[i]);
     }
     PrintHashTable(H);
     return 0;

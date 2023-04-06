@@ -16,7 +16,8 @@ typedef Index Position;
 struct HashTbl;
 typedef struct HashTbl* HashTable;
 
-HashTable InitializeTable(int TableSize);
+// FLAG 是否让表的大小为素数
+HashTable InitializeTable(int TableSize, int FLAG);
 void DestroyTable(HashTable H);
 
 Position FindLinear(ElementType Key, HashTable H);

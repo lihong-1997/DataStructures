@@ -18,7 +18,7 @@ struct HashTbl
     Cell* TheCells;
 };
 
-HashTable InitializeTable(int TableSize)
+HashTable InitializeTable(int TableSize, int FLAG)
 {
     if (TableSize < MinTableSize)
     {
@@ -30,7 +30,7 @@ HashTable InitializeTable(int TableSize)
     if (H == NULL)
         FatalError("out of space");
     
-    H->TableSize = NextPrime(TableSize);
+    H->TableSize = FLAG ? NextPrime(TableSize) : TableSize;
     H->TheCells = malloc(sizeof(Cell) * H->TableSize);
     if (H == NULL)
         FatalError("out of space");
@@ -144,21 +144,28 @@ HashTable InsertSquare(ElementType Key, HashTable H)
 
 Position FindDoubleHash(ElementType Key, HashTable H)
 {
-    Position CurrentPos;
-    CurrentPos = Hash(Key, H->TableSize);
+    Position CurrentPos, BeginPos;
+    CurrentPos = BeginPos = Hash(Key, H->TableSize);
     int CollisionNum;
     CollisionNum = 0;
 
     int R;
     R = LastPrime(H->TableSize);
-    // only when the table size is prime and half of table is empty, the loop can break
+
     while (H->TheCells[CurrentPos].Info != Empty && H->TheCells[CurrentPos].Element != Key)
     {
-        // Entering loop indicates a collision
-        // solvement: F(i) = i*hash(X) = i*(R-(X modR)),R must be prime and less than table size
-        CurrentPos += (R - (Key % R)); // great
+        // 进入循环说明发生冲突
+        // 冲突解决方法: F(i) = i*hash(X) = i*(R-(X modR)), R必须为小于表的素数
+        CurrentPos += (R - (Key % R));
         if (CurrentPos >= H->TableSize) 
             CurrentPos %= H->TableSize;
+        
+        // 判断是否回到循环开始，若是则证明没有单元可以插入或没有找到元素
+        if (CurrentPos == BeginPos)
+        {
+            printf("this key(%d)  not be inserted or found!!\n", Key);
+            return H->TableSize;
+        }
     }
 
     return CurrentPos;
@@ -168,7 +175,7 @@ void InsertDoubleHash(ElementType Key, HashTable H)
 {
     Position P;
     P = FindDoubleHash(Key, H);
-    if (H->TheCells[P].Info != Legitimate)
+    if (P != H->TableSize && H->TheCells[P].Info != Legitimate)
     {
         H->TheCells[P].Element = Key;
         H->TheCells[P].Info = Legitimate;
@@ -189,7 +196,7 @@ double GetLoadFactor(HashTable H)
 {
     unsigned int count = 0;
     for (unsigned int i = 0; i < H->TableSize; i++)
-        if (H->TheCells[i].Info == Legitimate) ++count;
+        if (H->TheCells[i].Info != Empty) ++count;
     
     return (double)count / H->TableSize;
 }
@@ -206,7 +213,7 @@ HashTable Rehash(HashTable H)
     OldSize = H->TableSize;
     OldCells = H->TheCells;
 
-    H = InitializeTable(2 * OldSize);
+    H = InitializeTable(2 * OldSize, 1);
 
     for (int i = 0; i < OldSize; i++)
     {
