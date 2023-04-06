@@ -15,7 +15,8 @@ int NextPrime(int TableSize)
         return TableSize;
     else
     {
-        while (++TableSize)
+        TableSize = (TableSize % 2) ? TableSize+2:TableSize+1;
+        for (;;TableSize += 2)
             if (isPrime(TableSize)) break;
         return TableSize;
     }

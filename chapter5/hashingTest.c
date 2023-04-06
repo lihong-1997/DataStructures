@@ -3,7 +3,7 @@
 int main()
 {
     HashTable H;
-    int tableSize = 100;
+    int tableSize = 70;
     H = InitializeTable(tableSize);
     for (int i = 1; i < 120; i++)
         Insert(i, H);

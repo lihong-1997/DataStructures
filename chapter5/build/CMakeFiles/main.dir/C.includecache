@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/hashsep.h
+stdio.h
+-
+stdlib.h
+-
+
+/home/ci/Desktop/DataStructures/chapter5/hashingTest.c
+hashsep.h
+/home/ci/Desktop/DataStructures/chapter5/hashsep.h
+
