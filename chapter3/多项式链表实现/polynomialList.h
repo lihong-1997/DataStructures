@@ -18,6 +18,7 @@ class Polynomial {
 	friend std::istream& operator>>(std::istream&, Polynomial&);
 	friend std::ostream& operator<<(std::ostream&, const Polynomial&);
 	friend Polynomial operator+(const Polynomial&, const Polynomial&);
+	friend Polynomial PolyMulti(const Polynomial&, const Polynomial&);
 	friend Polynomial operator*(const Polynomial&, const Polynomial&);
 	friend Polynomial polypower(const Polynomial&, unsigned);
 	friend Polynomial polypower2(const Polynomial&, unsigned);
