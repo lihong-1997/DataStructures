@@ -118,6 +118,6 @@ void ScanAndOutput(HashTable H)
         }
     }
     printf("%s %d", MinPhone, MaxCnt);
-    if (PCnt > 1) printf(" %d", PCnt);
+    if (PCnt > 1) printf(" %d", PCnt); //若狂人数量大于1，则输出
     printf("\n");
 }
