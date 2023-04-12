@@ -502,7 +502,7 @@ int isSame(SearchTree T1, SearchTree T2)
 	// one of is null or neither is null but element does not equal
 	if (!(T1 && T2) || T1->Element != T2->Element) return 0;
 	
-	return isSimilar(T1->Left, T2->Left) && isSimilar(T1->Right, T2->Right);
+	return isSame(T1->Left, T2->Left) && isSame(T1->Right, T2->Right);
 }
 
 // int isIsomorphic(SearchTree T1, SearchTree T2)
