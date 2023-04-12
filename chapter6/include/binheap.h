@@ -28,6 +28,10 @@ void Insert(ElementType X, PriorityQueue H);
 ElementType FinMin(PriorityQueue H);
 ElementType DeleteMin(PriorityQueue H);
 
+void DecreaseKey(int P, unsigned int delta, PriorityQueue H);
+void IncreaseKey(int P, unsigned int delta, PriorityQueue H);
+void Delete(int P, PriorityQueue H);
+
 ElementType Retrieve(int index, PriorityQueue H);
 
 int IsEmpty(PriorityQueue H);
