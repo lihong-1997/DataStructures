@@ -26,6 +26,8 @@ void MakeEmpty(PriorityQueue H);
 
 void Insert(ElementType X, PriorityQueue H);
 ElementType FinMin(PriorityQueue H);
+void FindLess(ElementType X, PriorityQueue H);
+int Find(ElementType X, PriorityQueue H);
 ElementType DeleteMin(PriorityQueue H);
 
 void DecreaseKey(int P, unsigned int delta, PriorityQueue H);

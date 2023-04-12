@@ -180,3 +180,55 @@ int Size(PriorityQueue H)
 {
     return H->Size;
 }
+void FindLess1(ElementType X, PriorityQueue H, int index)
+{
+    if (index <= H->Size)
+    {
+        if (H->Elements[index] < X)
+        {
+            printf("%d ", H->Elements[index]);
+            FindLess1(X, H, 2 * index);
+            FindLess1(X, H, 2 * index + 1);
+        }
+    }
+    else
+        return;
+}
+
+void FindLess(ElementType X, PriorityQueue H)
+{
+    int index = 1;
+    if (H != NULL)
+    {
+        if (H->Elements[index] < X) //根比X还大，则无需比较儿子节点！！！
+        {
+            printf("%d ", H->Elements[index]);
+            FindLess1(X, H, 2 * index);
+            FindLess1(X, H, 2 * index + 1);
+        }
+    }
+}
+
+int Find1(ElementType X, PriorityQueue H, int index)
+{
+    if (index > H->Size)
+        return 0;
+    if (H->Elements[index] > X)
+        return 0;
+    else if (H->Elements[index] == X)
+        return index;
+    else
+    {
+        int index1 =  Find1(X, H, 2 * index);
+        int index2 =  Find1(X, H, 2 * index + 1);
+        return index1 ? index1 : index2;
+    }
+}
+
+int Find(ElementType X, PriorityQueue H)
+{
+    if (X < H->Elements[0])
+        return 0;
+    else
+        return Find1(X, H, 1);
+}
