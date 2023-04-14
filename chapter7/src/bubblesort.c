@@ -1,6 +1,11 @@
-#include<stdio.h>
+#include "Sort.h"
 
-#define ElementType int
+void Print(ElementType A[], int N)
+{
+	for(int i = 0; i < N; i++)
+		printf("%d ", A[i]);
+	printf("\n");
+}
 
 void Swap(ElementType* val1, ElementType* val2)
 {
@@ -28,19 +33,4 @@ void Bubble_Sort(ElementType A[], int N)
 		if (flag == 0)
 			break;
 	}
-}
-
-int main()
-{
-	ElementType A[] = {4,2,9,5,11,7,8,13,10};
-	int len = sizeof(A)/sizeof(*A);
-
-	Bubble_Sort(A, len);
-	for (int i = 0; i < len; i++)
-	{
-		printf("%d ", A[i]);
-	}
-	printf("\n");
-	
-	return 0;
 }
