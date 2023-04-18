@@ -17,11 +17,14 @@ void Bubble_Sort(ElementType A[], int N);
 
 void Insertion_Sort(ElementType A[], int N);
 
+void Selection_Sort(ElementType A[], int N);
+
 void Shell_Sort(ElementType A[], int N);
 
 void Heap_Sort(ElementType A[], int N);
 
 void Merge_Sort(ElementType A[], int N);
+void Merge_Sort_iter(ElementType A[], int N);
 
 void Quick_Sort(ElementType A[], int N);
 
