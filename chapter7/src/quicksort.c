@@ -1,6 +1,6 @@
 #include "Sort.h"
 
-#define CutOff (3)
+#define CutOff (11)
 
 ElementType Median3(ElementType A[], int Left, int Right)
 {
