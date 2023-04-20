@@ -25,6 +25,7 @@ void Heap_Sort(ElementType A[], int N);
 
 void Merge_Sort(ElementType A[], int N);
 void Merge_Sort_iter(ElementType A[], int N);
+void Merge_Sort_iter2(ElementType A[], int N);
 
 void Quick_Sort(ElementType A[], int N);
 

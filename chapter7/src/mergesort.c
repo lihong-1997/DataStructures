@@ -94,3 +94,26 @@ void Merge_Sort_iter(ElementType A[], int N)
     }
     free(TmpArray);
 }
+
+#define min(a,b) ((a)<(b)?(a):(b))
+
+void Merge_Sort_iter2(ElementType A[], int N)
+{
+    ElementType* TmpArray;
+    int SubListSize, Part1Start, Part2Start, Part2End;
+    TmpArray = malloc(sizeof(ElementType) * N);
+    TmpArray[11] = 20;
+    if (TmpArray == NULL)
+        FatalError("out of space");
+    for (SubListSize = 1; SubListSize < N; SubListSize *= 2) {
+        Part1Start = 0;
+        //Part2Start <= N-1,╪╢спсрвсап
+        while (Part1Start + SubListSize < N) {
+            Part2Start = Part1Start + SubListSize;
+            Part2End = min(N - 1, Part2Start + SubListSize - 1);
+            Merge(A, TmpArray, Part1Start, Part2Start, Part2End);
+            Part1Start = Part2End + 1;
+        }
+    }
+    free(TmpArray);
+}
