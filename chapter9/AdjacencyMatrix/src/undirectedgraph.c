@@ -1,5 +1,6 @@
-#include "undirectedgraph.h"
+#include "AdjacencyMatrix/include/undirectedgraph.h"
 
+//邻接矩阵
 struct MGraph
 {
     VertexType vexs[MAXVEX];
@@ -23,7 +24,7 @@ Graph Intialize(void)
 
 void CreateGraphFromTxt(Graph G, char txt[])
 {
-    int i, r, c, w;
+    int i, j, r, c, w;
     FILE* fp;
     char line[100];
     fp = fopen(txt, "r");
@@ -34,8 +35,12 @@ void CreateGraphFromTxt(Graph G, char txt[])
 
     fgets(line, 100, fp);
     for (i = 0; i < G->numNodes; i++) {
-        G->vexs[i] = line[2 * i];
+        G->vexs[i] = line[2 * i]; 
     }
+
+    for (i = 0; i < G->numNodes; i++)
+        for (j = 0; j < G->numNodes; j++)
+            G->AdMatrix[i][j] = 0;
 
     for (i = 0; i < G->numEdges; i++) {
         fgets(line, 100, fp);
@@ -58,7 +63,7 @@ void CreateGraph(Graph G)
     }
     for (i = 0; i < G->numNodes; i++)
         for (j = 0; j < G->numNodes; j++)
-            G->AdMatrix[i][j] = INFINITY;
+            G->AdMatrix[i][j] = 0;
     for (k = 0; k < G->numEdges; k++) {
         printf("input (vi,vj) and w\n");
         scanf("%d,%d,%d", &i, &j, &w);
@@ -74,8 +79,8 @@ void DFS(Graph G, int V)
     int j;
     visited[V] = 1;
     printf("%c\n", G->vexs[V]);
-    for (j = 0; j < G->numNodes; j++) {
-        if (G->AdMatrix[V][j] != INFINITY && !visited[j]) {
+    for (j = 0; j < G->numNodes; j++) { //每次找V的邻接节点都要循环
+        if (G->AdMatrix[V][j] == 1 && !visited[j]) {
             DFS(G, j);
         }
     }
@@ -88,6 +93,7 @@ void DFSTraverse(Graph G)
         visited[i] = 0;
     }
     for (i = 0; i < G->numNodes; i++) {
-        if (!visited[i]) DFS(G, i);
+        if (!visited[i])
+            DFS(G, i);
     }
 }

@@ -4,11 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*based on adjacency matrix*/
+
 typedef char VertexType;
 typedef int EdgeType;
 
 #define MAXVEX 100
-#define INFINITY 65535
 
 struct MGraph;
 typedef struct MGraph* Graph;
