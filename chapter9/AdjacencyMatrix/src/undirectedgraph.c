@@ -1,6 +1,5 @@
-#include "AdjacencyMatrix/include/undirectedgraph.h"
+#include "undirectedgraph.h"
 
-//邻接矩阵
 struct MGraph
 {
     VertexType vexs[MAXVEX];
@@ -79,7 +78,7 @@ void DFS(Graph G, int V)
     int j;
     visited[V] = 1;
     printf("%c\n", G->vexs[V]);
-    for (j = 0; j < G->numNodes; j++) { //每次找V的邻接节点都要循环
+    for (j = 0; j < G->numNodes; j++) { //每锟斤拷锟斤拷V锟斤拷锟节接节点都要循锟斤拷
         if (G->AdMatrix[V][j] == 1 && !visited[j]) {
             DFS(G, j);
         }

@@ -1,8 +1,9 @@
 #include "undirectedgraph.h"
+#include "queue.h"
 
 struct EdgeNode
 {
-    int V; // ¶¥µãindex
+    int V; // ï¿½ï¿½ï¿½ï¿½index
     struct EdgeNode* next;
 };
 
@@ -58,7 +59,7 @@ void CreateLGraph(LGraph G)
         e->next = G->adjlist[i].firstedge;
         G->adjlist[i].firstedge = e;
         e->V = j;
-        // ¶Ô³Æ½Úµã
+        // ï¿½Ô³Æ½Úµï¿½
         e = malloc(sizeof(struct EdgeNode));
         e->next = G->adjlist[j].firstedge;
         G->adjlist[j].firstedge = e;
@@ -89,6 +90,39 @@ void DFS(LGraph G, int V)
         if (!visited[AdjNode->V])
             DFS(G, AdjNode->V);
         AdjNode = AdjNode->next;
+    }
+}
+
+void BFSTraverse(LGraph G)
+{
+    int i;
+    for (i = 0; i < G->numNodes; i++)
+        visited[i] = 0;
+    for (i = 0; i < G->numNodes; i++) {
+        if (!visited[i])
+            BFS(G, i);
+    }
+}
+
+void BFS(LGraph G, int V)
+{
+    visited[V] = 1;
+    Queue q;
+    struct EdgeNode* AdjNode;
+    q = CreateQueue(10);
+    Enqueue(V, q);
+    while (!IsEmpty(q)) {
+        V = FrontElement(q);
+        printf("%c\n", G->adjlist[V].data);
+        Dequeue(q);
+        AdjNode = G->adjlist[V].firstedge;
+        while (AdjNode != NULL) {
+            if (!visited[AdjNode->V]) {
+                visited[AdjNode->V] = 1;
+                Enqueue(AdjNode->V, q);
+            }
+            AdjNode = AdjNode->next;
+        }
     }
 }
 

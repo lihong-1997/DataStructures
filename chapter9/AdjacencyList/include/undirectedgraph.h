@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "queue.h"
 
 /*based on adjacency list*/
 
@@ -11,8 +12,8 @@ typedef int EdgeType;
 
 #define MAXVEX 10
 
-struct VertexNode; // ¶¥µã±í½Úµã
-struct EdgeNode; // ±ß±í½Úµã
+struct VertexNode; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½
+struct EdgeNode; // ï¿½ß±ï¿½ï¿½Úµï¿½
 
 
 typedef struct VertexNode* AdjList;
@@ -26,5 +27,7 @@ void CreateLGraphFromTxt(LGraph G, char* filename);
 
 void DFSTraverse(LGraph G);
 void DFS(LGraph G, int V);
+void BFSTraverse(LGraph G);
+void BFS(LGraph G, int V);
 
 #endif

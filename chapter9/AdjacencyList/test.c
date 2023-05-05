@@ -7,5 +7,6 @@ int main()
 
     CreateLGraph(G);
     DFSTraverse(G);
+    BFSTraverse(G);
     return 0;
 }
