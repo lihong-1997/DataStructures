@@ -1,4 +1,4 @@
-#include "undirectedgraph.h"
+#include "../include/undirectedgraph.h"
 #include "queue.h"
 
 struct EdgeNode
