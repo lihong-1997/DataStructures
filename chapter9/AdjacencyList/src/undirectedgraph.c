@@ -125,33 +125,21 @@ void BFSTraverse(LGraph G)
 
 void BFS(LGraph G, int V)
 {
-    // visited[V] = 1;
-    // Queue q;
-    // struct EdgeNode* AdjNode;
-    // q = CreateQueue(10);
-    // Enqueue(V, q);
-    // while (!IsEmpty(q)) {
-    //     V = FrontElement(q);
-    //     printf("%c\n", G->adjlist[V].data);
-    //     Dequeue(q);
-    //     AdjNode = G->adjlist[V].firstedge;
-    //     while (AdjNode != NULL) {
-    //         if (!visited[AdjNode->V]) {
-    //             visited[AdjNode->V] = 1;
-    //             Enqueue(AdjNode->V, q);
-    //         }
-    //         AdjNode = AdjNode->next;
-    //     }
-    // }
+    visited[V] = 1;
+    Queue q;
+    struct EdgeNode* AdjNode;
+    q = CreateQueue(10);
+    Enqueue(V, q);
+    while (!IsEmpty(q)) {
+        V = Dequeue(q);
+        printf("%c\n", G->adjlist[V].data);
+        AdjNode = G->adjlist[V].firstedge;
+        while (AdjNode != NULL) {
+            if (!visited[AdjNode->V]) {
+                visited[AdjNode->V] = 1;
+                Enqueue(AdjNode->V, q);
+            }
+            AdjNode = AdjNode->next;
+        }
+    }
 }
-
-int NumVertex(LGraph G)
-{
-    return G->numNodes;
-}
-
-AdjList GetAdjList(LGraph G)
-{
-    return G->adjlist;
-}
-

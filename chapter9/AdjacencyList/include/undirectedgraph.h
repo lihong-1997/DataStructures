@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "queue.h"
+#include "queue.h"
 
 /*based on adjacency list*/
 
@@ -35,7 +35,6 @@ struct LGraph
 };
 typedef struct LGraph* LGraph;
 
-
 LGraph Intialize(void);
 void CreateLGraph(LGraph G);
 void CreateLGraphFromTxt(LGraph G, char txt[]);
@@ -44,8 +43,5 @@ void DFSTraverse(LGraph G);
 void DFS(LGraph G, int V);
 void BFSTraverse(LGraph G);
 void BFS(LGraph G, int V);
-
-int NumVertex(LGraph G);
-AdjList GetAdjList(LGraph G);
 
 #endif
