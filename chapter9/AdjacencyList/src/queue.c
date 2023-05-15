@@ -73,14 +73,18 @@ void Enqueue(int X, Queue Q)
 	}
 }
 
-void Dequeue(Queue Q)
+int Dequeue(Queue Q)
 {
-	if (IsEmpty(Q))
+	if (IsEmpty(Q)) {
 		printf("Empty Queue");
+		exit(1);
+	}
 	else
 	{
+		int front = Q->Array[Q->Front];
 		Q->Size--;
 		Q->Front = Succ(Q->Front, Q);
+		return front;
 	}
 }
 

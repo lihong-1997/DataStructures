@@ -12,7 +12,7 @@ void MakeEmpty(Queue Q);
 void DisposeQueue(Queue Q);
 
 void Enqueue(int X, Queue Q);
-void Dequeue(Queue Q);
+int Dequeue(Queue Q);
 int FrontElement(Queue Q);
 
 #endif
