@@ -3,31 +3,49 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "queue.h"
+#include <string.h>
+//#include "queue.h"
 
 /*based on adjacency list*/
 
 typedef char VertexType;
 typedef int EdgeType;
 
-#define MAXVEX 10
+#define MAXVEX 30
 
-struct VertexNode; // ������ڵ�
-struct EdgeNode; // �߱��ڵ�
+struct EdgeNode
+{
+    int V;
+    EdgeType Weight;
+    struct EdgeNode* next;
+};
 
+struct VertexNode
+{
+    VertexType data;
+    struct EdgeNode* firstedge;
+};
 
 typedef struct VertexNode* AdjList;
-struct LGraph;
+struct LGraph
+{
+    int numNodes;
+    int numEdges;
+    AdjList adjlist;
+};
 typedef struct LGraph* LGraph;
 
 
 LGraph Intialize(void);
 void CreateLGraph(LGraph G);
-void CreateLGraphFromTxt(LGraph G, char* filename);
+void CreateLGraphFromTxt(LGraph G, char txt[]);
 
 void DFSTraverse(LGraph G);
 void DFS(LGraph G, int V);
 void BFSTraverse(LGraph G);
 void BFS(LGraph G, int V);
+
+int NumVertex(LGraph G);
+AdjList GetAdjList(LGraph G);
 
 #endif

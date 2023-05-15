@@ -1,24 +1,6 @@
 #include "../include/undirectedgraph.h"
-#include "queue.h"
+//#include "/root/DataStructures/chapter9/AdjacencyList/include/queue.h"
 
-struct EdgeNode
-{
-    int V; // ����index
-    struct EdgeNode* next;
-};
-
-struct VertexNode
-{
-    VertexType data;
-    struct EdgeNode* firstedge;
-};
-
-struct LGraph
-{
-    int numNodes;
-    int numEdges;
-    AdjList adjlist;
-};
 
 LGraph Intialize(void)
 {
@@ -48,9 +30,8 @@ void CreateLGraph(LGraph G)
     printf("input vertex num and edge num\n");
     scanf("%d,%d", &G->numNodes, &G->numEdges);
     int i, j, k;
-    for (i = 0; i < G->numNodes; i++) {
+    for (i = 0; i < G->numNodes; i++)
         scanf(" %c", &G->adjlist[i].data);
-    }
     struct EdgeNode* e;
     for (k = 0; k < G->numEdges; k++) {
         e = malloc(sizeof(struct EdgeNode));
@@ -64,6 +45,44 @@ void CreateLGraph(LGraph G)
         e->next = G->adjlist[j].firstedge;
         G->adjlist[j].firstedge = e;
         e->V = i;
+    }
+}
+
+void CreateLGraphFromTxt(LGraph G, char txt[])
+{
+    int i, r, c, w;
+    FILE* fp;
+    char* delim = " ";
+    char* tmp;
+    char line[100];
+    fp = fopen(txt, "r");
+
+    fgets(line, 100, fp);
+    tmp = strtok(line, delim);
+    G->numNodes = atoi(tmp);
+    tmp = strtok(NULL, delim);
+    G->numEdges = atoi(tmp);
+
+    fgets(line, 100, fp);
+    for (i = 0; i < G->numNodes; i++) {
+        G->adjlist[i].data = line[2 * i];
+        G->adjlist[i].firstedge = NULL;
+    }
+    struct EdgeNode* e;       
+    for (i = 0; i < G->numEdges; i++) {
+        fgets(line, 100, fp);
+        tmp = strtok(line, delim);
+        r = atoi(tmp);
+        tmp = strtok(NULL, delim);
+        c = atoi(tmp);
+        tmp = strtok(NULL, delim);
+        w = atoi(tmp);
+        e = malloc(sizeof(struct EdgeNode));
+        e->V = c;
+        e->Weight = w;
+        // 插入r的邻接表
+        e->next = G->adjlist[r].firstedge;
+        G->adjlist[r].firstedge = e;
     }
 }
 
@@ -106,25 +125,33 @@ void BFSTraverse(LGraph G)
 
 void BFS(LGraph G, int V)
 {
-    visited[V] = 1;
-    Queue q;
-    struct EdgeNode* AdjNode;
-    q = CreateQueue(10);
-    Enqueue(V, q);
-    while (!IsEmpty(q)) {
-        V = FrontElement(q);
-        printf("%c\n", G->adjlist[V].data);
-        Dequeue(q);
-        AdjNode = G->adjlist[V].firstedge;
-        while (AdjNode != NULL) {
-            if (!visited[AdjNode->V]) {
-                visited[AdjNode->V] = 1;
-                Enqueue(AdjNode->V, q);
-            }
-            AdjNode = AdjNode->next;
-        }
-    }
+    // visited[V] = 1;
+    // Queue q;
+    // struct EdgeNode* AdjNode;
+    // q = CreateQueue(10);
+    // Enqueue(V, q);
+    // while (!IsEmpty(q)) {
+    //     V = FrontElement(q);
+    //     printf("%c\n", G->adjlist[V].data);
+    //     Dequeue(q);
+    //     AdjNode = G->adjlist[V].firstedge;
+    //     while (AdjNode != NULL) {
+    //         if (!visited[AdjNode->V]) {
+    //             visited[AdjNode->V] = 1;
+    //             Enqueue(AdjNode->V, q);
+    //         }
+    //         AdjNode = AdjNode->next;
+    //     }
+    // }
 }
 
+int NumVertex(LGraph G)
+{
+    return G->numNodes;
+}
 
+AdjList GetAdjList(LGraph G)
+{
+    return G->adjlist;
+}
 
