@@ -19,7 +19,6 @@ LGraph Intialize(void)
     }
     int i;
     for (i = 0; i < MAXVEX; i++) {
-        G->adjlist[i].data = ' ';
         G->adjlist[i].firstedge = NULL;
     }
     return G;
@@ -40,7 +39,7 @@ void CreateLGraph(LGraph G)
         e->next = G->adjlist[i].firstedge;
         G->adjlist[i].firstedge = e;
         e->V = j;
-        // �Գƽڵ�
+        
         e = malloc(sizeof(struct EdgeNode));
         e->next = G->adjlist[j].firstedge;
         G->adjlist[j].firstedge = e;
@@ -64,9 +63,11 @@ void CreateLGraphFromTxt(LGraph G, char txt[])
     G->numEdges = atoi(tmp);
 
     fgets(line, 100, fp);
+    tmp = strtok(line, delim);
     for (i = 0; i < G->numNodes; i++) {
-        G->adjlist[i].data = line[2 * i];
+        //memcpy(G->adjlist[i].data, tmp, strlen(tmp));
         G->adjlist[i].firstedge = NULL;
+        tmp = strtok(NULL, delim);
     }
     struct EdgeNode* e;       
     for (i = 0; i < G->numEdges; i++) {

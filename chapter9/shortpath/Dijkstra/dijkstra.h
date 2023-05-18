@@ -24,7 +24,7 @@ typedef PtrToNode Position;
 struct TableEntry
 {
     List Header; // 邻接表
-    int known; // 标记是否已知最短路径
+    int Known; // 标记是否已知最短路径
     DistType Dist; // 到源点的距离
     Vertex Path; // 路径
 };
@@ -32,7 +32,11 @@ typedef struct TableEntry* Table;
 
 void ReadGraph(LGraph G, Table T);
 void InitTable(Vertex Start, LGraph G, Table T);
+
+// 图没有负值边
 void Dijkstra(Table T, int size);
+// 图有负值边
+void WeightedNegative(Table T, int size);
 void PrintPath(Vertex V, Table T);
 
 
